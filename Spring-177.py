@@ -10,19 +10,33 @@ Divided_corrdiates = 1
 number_of_file = 10  # Replace with your desired value
 
 # Ask the user for the number of bits for the file numbers
-num_bits = int(input("Enter the number of bits for the file numbers: "))
 
-# Calculate the maximum value based on the number of bits
-max_value = 2**num_bits
 
 # Ask the user for the name of the file for compression
+
+extract_option = input("Enter '1' for one type of extraction or '2' for another type: ")
+
 compression_file_name = input("Enter the name of the file for compression: ")
 
 # Ask the user for the name of the file to save compressed data
 save_file_name = input("Enter the name of the file to save compressed data: ")
 
+with open(compression_file_name, "rb") as file:
+        compressed_data_check_size = file.read()
+        
+if extract_option=="2":
+    num_bits_minus=len(compressed_data_check_size)
+    num_bits=(num_bits_minus%8)-1
+    print("This number you must use for extract your file")
+    print(num_bits)
+elif extract_option=="1":
+    num_bits = int(input("Enter the number of bits for the file numbers: "))
+    # Calculate the maximum value based on the number of bit
+    
+max_value = 2**num_bits
+
 # Prompt the user for extraction options
-extract_option = input("Enter '1' for one type of extraction or '2' for another type: ")
+
 
 while X < max_value:
     # Increment X by 1
