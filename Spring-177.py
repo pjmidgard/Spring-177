@@ -1,55 +1,85 @@
 import paq
+X = 0
+Z = 0
 
-# Custom Base 255 encoding function
-def custom_base255_encode(data):
-    encoded_data = bytes((x + 1 if x < 255 else 255 for x in data))
-    return encoded_data
+Number_of_the_file = 0
+y = 0
+Add = 0
+T_Real = 0
+Divided_corrdiates = 1
+number_of_file = 10  # Replace with your desired value
 
-# Custom Base 255 decoding function
-def custom_base255_decode(data):
-    decoded_data = bytes((x - 1 if x > 0 else 0 for x in data))
-    return decoded_data
+# Ask the user for the number of bits for the file numbers
+num_bits = int(input("Enter the number of bits for the file numbers: "))
 
-# Compression
-def compress_file(file_name, output_file_name):
-    with open(file_name, "rb") as file:
-        file_content = file.read()
+# Calculate the maximum value based on the number of bits
+max_value = 2**num_bits
 
-    compressed_content = file_content
-    encoded_content = custom_base255_encode(paq.compress(compressed_content))
+# Ask the user for the name of the file for compression
+compression_file_name = input("Enter the name of the file for compression: ")
 
-    with open(output_file_name, "wb") as output_file:
-        output_file.write(encoded_content)
+# Ask the user for the name of the file to save compressed data
+save_file_name = input("Enter the name of the file to save compressed data: ")
 
-    print(f"File '{file_name}' compressed and saved as '{output_file_name}'.")
+# Prompt the user for extraction options
+extract_option = input("Enter '1' for one type of extraction or '2' for another type: ")
 
-# Extraction
-def extract_file(file_name, extracted_file_name):
-    with open(file_name, "rb") as file:
-        file_content = file.read()
+while X < max_value:
+    # Increment X by 1
+    X += 1
 
-    decoded_content = custom_base255_decode(paq. decompress(file_content))
-    decompressed_content = decoded_content
+    # Save X in binary format with leading zeros to match the specified number of bits
+    binary_representation = format(X, f"0{num_bits}b")
 
-    with open(extracted_file_name, "wb") as extracted_file:
-        extracted_file.write(decompressed_content)
+    # Save the binary representation to a binary file
+    with open(compression_file_name, "wb") as file:
+        file.write(binary_representation.encode('utf-8'))
 
-    print(f"File '{file_name}' extracted and saved as '{extracted_file_name}'.")
+    # Read the binary data from the file
+    with open(compression_file_name, "rb") as file:
+        binary_data = file.read()
 
-# Ask the user for an option
-choice = input("Choose an option:\n1. Compress a file\n2. Extract a file\nEnter 1 or 2: ")
+    # Extract the binary data to recover X
+    extracted_X = int(binary_data, 2)
 
-if choice == "1":
-    # Compression
-    file_name = input("Enter the name of the file you want to compress: ")
-    output_file_name = input("Enter the name of the output file for the compressed data: ")
-    compress_file(file_name, output_file_name)
+    # Increment Z by 1
+    Z += 1
 
-elif choice == "2":
-    # Extraction
-    file_name = input("Enter the name of the file you want to extract: ")
-    extracted_file_name = input("Enter the name of the output file for the extracted data: ")
-    extract_file(file_name, extracted_file_name)
+    # Using the provided formula
+    Number_of_the_file = (((Number_of_the_file * 2 ** y) + Add) // 3) * T_Real // Divided_corrdiates
+    Divided_corrdiates += 1
+    T_Real += 1
+    Add += 1
+    y += 1
+    Number_of_the_file += 1
 
-else:
-    print("Invalid option. Please choose 1 or 2.")
+    # Compression and data extraction can be added here
+    if extract_option == '1':
+        # Option 1 for extraction
+        data_to_compress = f"Your data to be compressed for iteration {Number_of_the_file}"
+    elif extract_option == '2':
+        # Option 2 for extraction
+        data_to_compress = f"Another data to be compressed for iteration {Number_of_the_file}"
+    else:
+        # Handle invalid extraction option
+        print("Invalid extraction option. Please choose '1' or '2'.")
+
+    # Perform compression
+    compressed_data = paq.compress(data_to_compress.encode('utf-8'))
+
+    # Save compressed data to the specified file
+    with open(save_file_name, "wb") as file:
+        file.write(compressed_data)
+
+    # Read the compressed data from the file
+    with open(save_file_name, "rb") as file:
+        compressed_data = file.read()
+
+    # Extract the data
+    extracted_data = paq.decompress(compressed_data)
+
+    # Print or work with the extracted data
+    #print(f"Number_of_the_file: {Number_of_the_file}")
+    #print(f"Extracted data for iteration {Number_of_the_file}: {extracted_data.decode('utf-8')}")
+
+# End of the loop
